@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 project(LibtorrentPieceFiles)
 
-add_executable(LibtorrentPieceFiles src/main.cpp src/util.cpp src/util.h)
+add_executable(LibtorrentPieceFiles src/main.cpp src/util.cpp src/util.h src/operation.h)
 
 include(cmake/FindLibtorrentRasterbar.cmake)
 
