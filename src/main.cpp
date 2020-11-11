@@ -1,15 +1,13 @@
-#include "main.h"
+#include "util.h"
 
-#include "libtorrent/torrent_flags.hpp"
 #include "libtorrent/torrent_info.hpp"
 #include "libtorrent/add_torrent_params.hpp"
 #include "libtorrent/read_resume_data.hpp"
 
 #include <iostream>
-#include <fstream>
-#include <string>
 #include <vector>
-#include <cctype>
+
+lt::torrent_flags_t originalFlags;
 
 int main(int argc, char *argv[]) {
     if (argc < 3 || argc > 4) {
@@ -112,48 +110,4 @@ int main(int argc, char *argv[]) {
 
 
     return 0;
-}
-
-std::vector<char> readFile(char* fileName) {
-    std::ifstream ifs(fileName, std::ios_base::binary);
-    ifs.unsetf(std::ios_base::skipws);
-    std::vector<char> buf{std::istream_iterator<char>(ifs)
-            , std::istream_iterator<char>()};
-    return buf;
-}
-
-char askQuestion(std::string question, std::vector<char> answers) {
-    bool firstTime = true;
-    std::string answersList = "[";
-    for (char &answer : answers) {
-        if (!firstTime)
-            answersList += "/";
-        answersList += answer;
-        firstTime = false;
-    }
-    answersList += "] ";
-
-    while (true) {
-        std::cout << question << " " << answersList;
-        char answer;
-        std::cin >> answer;
-        for (char &answers : answers) {
-            if (tolower(answer) == tolower(answers))
-                return tolower(answer);
-        }
-        std::cout << "Invalid answer!" << std::endl;
-    }
-}
-
-void setFlag(lt::torrent_flags_t flag, bool value, lt::torrent_flags_t& flags) {
-    if (value)
-        flags |= flag;
-    else
-        flags &= ~flag;
-}
-
-bool getFlag(lt::torrent_flags_t flag, lt::torrent_flags_t& flags) {
-    if (flag & flags)
-        return true;
-    return false;
 }
